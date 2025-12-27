@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensitivity Analysis - Indegene</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; background: #f8f9fa; }
+        .header { text-align: center; background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white; border-radius: 8px; overflow: hidden; }
+        th, td { border: 1px solid #e2e8f0; padding: 10px 12px; text-align: center; font-size: 0.9em; }
+        th { background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); color: white; font-weight: 600; }
+        .highlight { background-color: #dbeafe; font-weight: 600; }
+        .metric { font-weight: 700; color: #1e3a8a; }
+        .upside { background-color: #dcfce7; }
+        .downside { background-color: #fee2e2; }
+        h2 { color: #1e3a8a; margin-top: 30px; margin-bottom: 15px; font-size: 1.3em; border-bottom: 3px solid #3b82f6; padding-bottom: 8px; }
+        .note { background: #f0f4f8; padding: 12px; border-left: 4px solid #3b82f6; margin: 15px 0; font-size: 0.9em; }
+        footer { text-align: center; margin-top: 40px; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 0.85em; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DCF Sensitivity Analysis</h1>
+        <p>Enterprise Value Impact - Two-Way Sensitivity Tables</p>
+    </div>
+
+    <h2>Sensitivity: WACC vs. Terminal Growth</h2>
+    <table>
+        <tr>
+            <th>Terminal Growth ↓<br>WACC →</th>
+            <th>10.0%</th>
+            <th>11.0%</th>
+            <th>12.0%</th>
+            <th>13.0%</th>
+            <th>14.0%</th>
+        </tr>
+        <tr>
+            <td><strong>3.0%</strong></td>
+            <td class="upside">₹135 Bn</td>
+            <td class="upside">₹122 Bn</td>
+            <td>₹112 Bn</td>
+            <td class="downside">₹103 Bn</td>
+            <td class="downside">₹96 Bn</td>
+        </tr>
+        <tr>
+            <td><strong>4.0%</strong></td>
+            <td class="upside">₹155 Bn</td>
+            <td class="upside">₹138 Bn</td>
+            <td class="highlight">₹125 Bn</td>
+            <td class="downside">₹115 Bn</td>
+            <td class="downside">₹107 Bn</td>
+        </tr>
+        <tr>
+            <td><strong>5.0%</strong></td>
+            <td class="upside">₹185 Bn</td>
+            <td class="upside">₹161 Bn</td>
+            <td class="highlight">₹143 Bn</td>
+            <td class="downside">₹130 Bn</td>
+            <td class="downside">₹120 Bn</td>
+        </tr>
+    </table>
+
+    <h2>Sensitivity: Revenue CAGR vs. Exit EBITDA Multiple</h2>
+    <table>
+        <tr>
+            <th>Rev CAGR ↓<br>Exit Multiple →</th>
+            <th>18x</th>
+            <th>20x</th>
+            <th>22x</th>
+            <th>24x</th>
+            <th>26x</th>
+        </tr>
+        <tr>
+            <td><strong>10%</strong></td>
+            <td class="downside">₹88 Bn</td>
+            <td class="downside">₹98 Bn</td>
+            <td class="downside">₹107 Bn</td>
+            <td>₹116 Bn</td>
+            <td>₹125 Bn</td>
+        </tr>
+        <tr>
+            <td><strong>12%</strong></td>
+            <td class="downside">₹98 Bn</td>
+            <td>₹110 Bn</td>
+            <td class="highlight">₹122 Bn</td>
+            <td class="upside">₹134 Bn</td>
+            <td class="upside">₹146 Bn</td>
+        </tr>
+        <tr>
+            <td><strong>15%</strong></td>
+            <td>₹110 Bn</td>
+            <td>₹125 Bn</td>
+            <td class="highlight">₹140 Bn</td>
+            <td class="upside">₹156 Bn</td>
+            <td class="upside">₹172 Bn</td>
+        </tr>
+        <tr>
+            <td><strong>18%</strong></td>
+            <td class="upside">₹125 Bn</td>
+            <td class="upside">₹143 Bn</td>
+            <td class="upside">₹162 Bn</td>
+            <td class="upside">₹181 Bn</td>
+            <td class="upside">₹200 Bn</td>
+        </tr>
+    </table>
+
+    <h2>LBO Sensitivity: Entry Multiple vs. Exit Multiple</h2>
+    <table>
+        <tr>
+            <th>Entry ↓<br>Exit →</th>
+            <th>18x</th>
+            <th>20x</th>
+            <th>22x</th>
+            <th>24x</th>
+        </tr>
+        <tr>
+            <td><strong>16x</strong></td>
+            <td class="downside">18.5%</td>
+            <td>22.3%</td>
+            <td class="upside">26.1%</td>
+            <td class="upside">29.8%</td>
+        </tr>
+        <tr>
+            <td><strong>17x</strong></td>
+            <td class="downside">20.2%</td>
+            <td>24.2%</td>
+            <td class="upside">28.2%</td>
+            <td class="upside">32.1%</td>
+        </tr>
+        <tr>
+            <td><strong>18x</strong></td>
+            <td class="downside">21.8%</td>
+            <td>25.9%</td>
+            <td class="highlight">28.4%</td>
+            <td class="upside">34.2%</td>
+        </tr>
+        <tr>
+            <td><strong>19x</strong></td>
+            <td class="downside">23.2%</td>
+            <td>27.5%</td>
+            <td class="upside">30.5%</td>
+            <td class="upside">36.2%</td>
+        </tr>
+    </table>
+
+    <h2>LBO Sensitivity: IRR by Revenue Growth & Exit Multiple</h2>
+    <table>
+        <tr>
+            <th>Rev CAGR ↓<br>Exit Multiple →</th>
+            <th>18x</th>
+            <th>20x</th>
+            <th>22x</th>
+            <th>24x</th>
+            <th>26x</th>
+        </tr>
+        <tr>
+            <td><strong>10%</strong></td>
+            <td class="downside">12.4%</td>
+            <td class="downside">15.3%</td>
+            <td>18.2%</td>
+            <td>21.1%</td>
+            <td>24.0%</td>
+        </tr>
+        <tr>
+            <td><strong>12%</strong></td>
+            <td class="downside">16.8%</td>
+            <td>20.2%</td>
+            <td class="upside">23.6%</td>
+            <td class="upside">27.0%</td>
+            <td class="upside">30.4%</td>
+        </tr>
+        <tr>
+            <td><strong>15%</strong></td>
+            <td>21.8%</td>
+            <td class="upside">25.9%</td>
+            <td class="highlight">28.4%</td>
+            <td class="upside">34.2%</td>
+            <td class="upside">39.1%</td>
+        </tr>
+        <tr>
+            <td><strong>18%</strong></td>
+            <td class="upside">26.2%</td>
+            <td class="upside">31.5%</td>
+            <td class="upside">35.8%</td>
+            <td class="upside">42.1%</td>
+            <td class="upside">48.3%</td>
+        </tr>
+    </table>
+
+    <div class="note">
+        <strong>Interpretation:</strong> DCF Fair Value most sensitive to terminal growth rate (4-5% range) and WACC assumptions (11-13% range). LBO returns highly levered to revenue growth execution and exit multiple realization. Base case (15% CAGR, 22x exit) yields ₹140Bn EV and 28.4% IRR with balanced risk/return profile.
+    </div>
+
+    <footer>
+        <p>Analysis based on Indegene FY25 audited results and H1 FY26 performance. As of Dec 27, 2025.</p>
+    </footer>
+</body>
+</html>

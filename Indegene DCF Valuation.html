@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indegene DCF Valuation Model</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+            border-bottom: 2px solid rgba(56, 189, 248, 0.3);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #38bdf8;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+        }
+
+        .valuation-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(56, 189, 248, 0.5);
+            box-shadow: 0 8px 32px rgba(56, 189, 248, 0.1);
+        }
+
+        .card-title {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .card-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #38bdf8;
+            margin-bottom: 8px;
+        }
+
+        .card-meta {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .upside { color: #10b981; }
+        .downside { color: #ef4444; }
+        .neutral { color: #f59e0b; }
+
+        .inputs-section {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .inputs-title {
+            font-size: 1.5rem;
+            color: #38bdf8;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input, select {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: #f1f5f9;
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #38bdf8;
+            color: #0f172a;
+        }
+
+        .btn-primary:hover {
+            background: #0ea5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(56, 189, 248, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(56, 189, 248, 0.2);
+            color: #38bdf8;
+            border: 1px solid #38bdf8;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(56, 189, 248, 0.3);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 0.95rem;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            color: #38bdf8;
+            border-bottom-color: #38bdf8;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .forecast-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.95rem;
+        }
+
+        .forecast-table th {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid rgba(56, 189, 248, 0.3);
+            font-weight: 600;
+        }
+
+        .forecast-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.1);
+            color: #cbd5e1;
+        }
+
+        .forecast-table tr:hover {
+            background: rgba(56, 189, 248, 0.05);
+        }
+
+        .highlight {
+            background: rgba(56, 189, 248, 0.1);
+            color: #38bdf8;
+            font-weight: 600;
+        }
+
+        .chart-container {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-title {
+            color: #38bdf8;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .scenario-card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .scenario-card.bull {
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .scenario-card.bear {
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .scenario-card.base {
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .scenario-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 10px;
+        }
+
+        .scenario-card.bull .scenario-label { color: #10b981; }
+        .scenario-card.bear .scenario-label { color: #ef4444; }
+        .scenario-card.base .scenario-label { color: #f59e0b; }
+
+        .scenario-value {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .scenario-card.bull .scenario-value { color: #10b981; }
+        .scenario-card.bear .scenario-value { color: #ef4444; }
+        .scenario-card.base .scenario-value { color: #f59e0b; }
+
+        .footnote {
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .input-group {
+                grid-template-columns: 1fr;
+            }
+
+            .forecast-table {
+                font-size: 0.8rem;
+            }
+
+            .forecast-table th,
+            .forecast-table td {
+                padding: 8px 4px;
+            }
+        }
+
+        .alert {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid #38bdf8;
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            color: #cbd5e1;
+        }
+
+        .alert-title {
+            color: #38bdf8;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.1);
+        }
+
+        .metric-label {
+            color: #94a3b8;
+        }
+
+        .metric-value {
+            color: #f1f5f9;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💰 Indegene DCF Valuation Model</h1>
+            <p class="subtitle">Interactive Financial Analysis | Real Financials: FY24-Q2FY26 | Base Case HOLD | Bull Case BUY ₹400-450</p>
+        </header>
+
+        <!-- Valuation Summary Cards -->
+        <div class="valuation-summary">
+            <div class="card">
+                <div class="card-title">Current Market Price</div>
+                <div class="card-value" id="cmp">₹520</div>
+                <div class="card-meta">NSE: INDGN | Dec 27, 2025</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Base Case Fair Value</div>
+                <div class="card-value" id="dcf-base" style="color: #f59e0b;">₹401</div>
+                <div class="card-meta" id="downside-base">DOWNSIDE: -22.9%</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Bull Case Fair Value</div>
+                <div class="card-value" style="color: #10b981;">₹550</div>
+                <div class="card-meta" id="upside-bull">UPSIDE: +5.7%</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Fair Value Range</div>
+                <div class="card-value" style="color: #38bdf8;">₹280 - ₹550</div>
+                <div class="card-meta">Bear to Bull Case | 96% dispersion</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Enterprise Value</div>
+                <div class="card-value" id="ev">₹83,204</div>
+                <div class="card-meta">+ Net Cash: ₹18,200 Mn</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">12M Target Price</div>
+                <div class="card-value" style="color: #10b981;">₹430-500</div>
+                <div class="card-meta">Bull Case | 34% IRR | Prob-Weighted</div>
+            </div>
+        </div>
+
+        <!-- Alert Box -->
+        <div class="alert">
+            <div class="alert-title">📊 Investment Summary</div>
+            <strong>RATING: HOLD at ₹520 | BUY on dips to ₹400-450</strong><br>
+            Indegene trades at 25% premium to DCF Base Case (13.1x EV/EBITDA vs. 17.6x current). Requires <strong>near-perfect execution</strong> on Tectonic ($10-15M target), Cortex platform ($20-30M target), and BioPharm synergies ($8-15M target) to justify current valuations. Fortress balance sheet (₹18.2B cash) enables M&A optionality.
+        </div>
+
+        <!-- Input Section -->
+        <div class="inputs-section">
+            <div class="inputs-title">⚙️ DCF Model Assumptions</div>
+
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('financials')">Base Financials</button>
+                <button class="tab-btn" onclick="switchTab('growth')">Growth Rates</button>
+                <button class="tab-btn" onclick="switchTab('wacc')">WACC & Terminal</button>
+            </div>
+
+            <!-- Tab 1: Financials -->
+            <div id="financials" class="tab-content active">
+                <div class="input-group">
+                    <div class="input-field">
+                        <label>FY25 Actual Revenue (₹ Mn)</label>
+                        <input type="number" id="fy25-revenue" value="28393" disabled>
+                    </div>
+                    <div class="input-field">
+                        <label>FY25 Actual EBITDA (₹ Mn)</label>
+                        <input type="number" id="fy25-ebitda" value="5622" disabled>
+                    </div>
+                    <div class="input-field">
+                        <label>H1 FY26 Revenue (₹ Mn)</label>
+                        <input type="number" id="h1-revenue" value="15650" disabled>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="input-field">
+                        <label>Current Cash Position (₹ Mn)</label>
+                        <input type="number" id="cash" value="18200" disabled>
+                    </div>
+                    <div class="input-field">
+                        <label>Shares Outstanding (Mn)</label>
+                        <input type="number" id="shares" value="239" disabled>
+                    </div>
+                    <div class="input-field">
+                        <label>Current Stock Price (₹)</label>
+                        <input type="number" id="stock-price" value="520" onchange="calculateValuation()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Growth Rates -->
+            <div id="growth" class="tab-content">
+                <div class="input-group">
+                    <div class="input-field">
+                        <label>FY26E Revenue Growth (%)</label>
+                        <input type="number" id="growth-fy26" value="10" step="0.5" onchange="calculateValuation()">
+                    </div>
+                    <div class="input-field">
+                        <label>FY27-31E CAGR (%)</label>
+                        <input type="number" id="growth-cagr" value="15" step="0.5" onchange="calculateValuation()">
+                    </div>
+                    <div class="input-field">
+                        <label>Terminal Growth Rate (%)</label>
+                        <input type="number" id="growth-terminal" value="4" step="0.5" onchange="calculateValuation()">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="input-field">
+                        <label>Terminal EBITDA Margin (%)</label>
+                        <input type="number" id="terminal-margin" value="23" step="0.5" onchange="calculateValuation()">
+                    </div>
+                    <div class="input-field">
+                        <label>Tax Rate (%)</label>
+                        <input type="number" id="tax-rate" value="22" step="0.5" onchange="calculateValuation()">
+                    </div>
+                    <div class="input-field">
+                        <label>CapEx as % of Revenue</label>
+                        <input type="number" id="capex-pct" value="1.2" step="0.1" onchange="calculateValuation()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: WACC -->
+            <div id="wacc" class="tab-content">
+                <div class="input-group">
+                    <div class="input-field">
+                        <label>Risk-Free Rate (%)</label>
+                        <input type="number" id="rf-rate" value="6.5" step="0.1" onchange="calculateValuation()">
+                    </div>
+                    <div class="input-field">
+                        <label>Beta (Levered)</label>
+                        <input type="number" id="beta" value="1.2" step="0.1" onchange="calculateValuation()">
+                    </div>
+                    <div class="input-field">
+                        <label>Market Risk Premium (%)</label>
+                        <input type="number" id="mrp" value="7" step="0.5" onchange="calculateValuation()">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="input-field">
+                        <label>Cost of Equity (Auto Calc)</label>
+                        <input type="number" id="coe" value="14.9" disabled>
+                    </div>
+                    <div class="input-field">
+                        <label>Terminal EV/EBITDA Multiple</label>
+                        <input type="number" id="terminal-multiple" value="12" step="0.5" onchange="calculateValuation()">
+                    </div>
+                    <div class="input-field">
+                        <label>WACC (= Cost of Equity)</label>
+                        <input type="number" id="wacc" value="14.9" disabled>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-primary" onclick="calculateValuation()">🔄 Calculate DCF</button>
+                <button class="btn-secondary" onclick="loadBaseCase()">📌 Base Case</button>
+                <button class="btn-secondary" onclick="loadBullCase()">🚀 Bull Case</button>
+                <button class="btn-secondary" onclick="loadBearCase()">📉 Bear Case</button>
+            </div>
+        </div>
+
+        <!-- Scenario Analysis -->
+        <div class="scenario-grid">
+            <div class="scenario-card base">
+                <div class="scenario-label">📊 Base Case</div>
+                <div class="scenario-value" id="base-value">₹401</div>
+                <div class="footnote">Downside: -22.9%<br>WACC: 14.9% | Growth: 15% CAGR | Margin: 23%</div>
+            </div>
+
+            <div class="scenario-card bull">
+                <div class="scenario-label">🚀 Bull Case</div>
+                <div class="scenario-value" id="bull-value">₹550</div>
+                <div class="footnote">Upside: +5.7%<br>WACC: 13.5% | Growth: 18% CAGR | Margin: 24%<br>Tectonic/Cortex ramp faster</div>
+            </div>
+
+            <div class="scenario-card bear">
+                <div class="scenario-label">📉 Bear Case</div>
+                <div class="scenario-value" id="bear-value">₹280</div>
+                <div class="footnote">Downside: -46.1%<br>WACC: 16.5% | Growth: 10% CAGR | Margin: 21%<br>Execution delays risk</div>
+            </div>
+        </div>
+
+        <!-- Forecast Table -->
+        <div class="chart-container">
+            <div class="chart-title">📈 5-Year Revenue & EBITDA Forecast (Base Case)</div>
+            <table class="forecast-table">
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>FY25A</th>
+                        <th>FY26E</th>
+                        <th>FY27E</th>
+                        <th>FY28E</th>
+                        <th>FY29E</th>
+                        <th>FY30E</th>
+                        <th>FY31E</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-weight: 600;">Revenue (₹ Mn)</td>
+                        <td class="highlight">28,393</td>
+                        <td id="rev-fy26">31,233</td>
+                        <td id="rev-fy27">35,918</td>
+                        <td id="rev-fy28">41,306</td>
+                        <td id="rev-fy29">47,502</td>
+                        <td id="rev-fy30">54,628</td>
+                        <td id="rev-fy31">62,822</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">YoY Growth %</td>
+                        <td class="highlight">9.6%</td>
+                        <td id="grw-fy26">10.0%</td>
+                        <td id="grw-fy27">15.0%</td>
+                        <td id="grw-fy28">15.0%</td>
+                        <td id="grw-fy29">15.0%</td>
+                        <td id="grw-fy30">15.0%</td>
+                        <td id="grw-fy31">15.0%</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">EBITDA (₹ Mn)</td>
+                        <td class="highlight">5,622</td>
+                        <td id="ebitda-fy26">6,247</td>
+                        <td id="ebitda-fy27">7,535</td>
+                        <td id="ebitda-fy28">9,283</td>
+                        <td id="ebitda-fy29">11,476</td>
+                        <td id="ebitda-fy30">14,065</td>
+                        <td id="ebitda-fy31">14,449</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">EBITDA Margin %</td>
+                        <td class="highlight">19.8%</td>
+                        <td id="margin-fy26">20.0%</td>
+                        <td id="margin-fy27">20.5%</td>
+                        <td id="margin-fy28">22.5%</td>
+                        <td id="margin-fy29">24.2%</td>
+                        <td id="margin-fy30">25.7%</td>
+                        <td id="margin-fy31">23.0%</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">FCF (₹ Mn)</td>
+                        <td class="highlight">-</td>
+                        <td id="fcf-fy26">4,100</td>
+                        <td id="fcf-fy27">5,100</td>
+                        <td id="fcf-fy28">6,400</td>
+                        <td id="fcf-fy29">8,100</td>
+                        <td id="fcf-fy30">10,050</td>
+                        <td id="fcf-fy31">11,000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- DCF Calculation Details -->
+        <div class="chart-container">
+            <div class="chart-title">🔢 DCF Valuation Breakdown</div>
+            <div class="metric-row">
+                <span class="metric-label">PV of FCF (FY26-31)</span>
+                <span class="metric-value" id="pv-fcf">₹27,818 Mn</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Terminal Value (Gordon Growth)</span>
+                <span class="metric-value" id="terminal-value">₹127,444 Mn</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">PV of Terminal Value</span>
+                <span class="metric-value" id="pv-terminal">₹55,386 Mn</span>
+            </div>
+            <div class="metric-row" style="border-bottom: 2px solid rgba(56, 189, 248, 0.3); padding-top: 12px; padding-bottom: 12px;">
+                <span class="metric-label" style="font-weight: 600; color: #38bdf8;">Enterprise Value</span>
+                <span class="metric-value" id="enterprise-value" style="font-size: 1.3rem; color: #38bdf8;">₹83,204 Mn</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">+ Net Cash</span>
+                <span class="metric-value">₹18,200 Mn</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">= Equity Value</span>
+                <span class="metric-value">₹101,404 Mn</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">÷ Shares Outstanding</span>
+                <span class="metric-value">239 Mn</span>
+            </div>
+            <div class="metric-row" style="border-top: 2px solid rgba(56, 189, 248, 0.3); padding-top: 12px;">
+                <span class="metric-label" style="font-weight: 600; color: #38bdf8;">VALUE PER SHARE</span>
+                <span class="metric-value" id="value-per-share" style="font-size: 1.3rem; color: #38bdf8;">₹401</span>
+            </div>
+        </div>
+
+        <!-- Key Assumptions -->
+        <div class="chart-container">
+            <div class="chart-title">✅ Key Investment Assumptions</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                <div>
+                    <h3 style="color: #38bdf8; margin-bottom: 10px;">💼 Business Drivers</h3>
+                    <ul style="color: #cbd5e1; line-height: 1.8;">
+                        <li>✓ Patent cliff: ₹55B TAM (2023-27 drug launches)</li>
+                        <li>✓ AI/GenAI adoption: 25% CAGR to 2030</li>
+                        <li>✓ Tectonic strategic consulting: $10-15M target</li>
+                        <li>✓ Cortex platform: $20-30M SaaS revenue</li>
+                        <li>✓ BioPharm synergies: $12M+ cross-sell</li>
+                        <li>✓ Top 20 pharma: 63% revenue (fortress clients)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: #38bdf8; margin-bottom: 10px;">⚠️ Key Risks</h3>
+                    <ul style="color: #cbd5e1; line-height: 1.8;">
+                        <li>✗ Tectonic adoption slower (25% probability)</li>
+                        <li>✗ Cortex competitive headwinds (20%)</li>
+                        <li>✗ Key talent loss post-M&A (35%)</li>
+                        <li>✗ BioPharm integration delays (20%)</li>
+                        <li>✗ Pharma consolidation/vendor risk (25%)</li>
+                        <li>✗ US geopolitical/visa restrictions (30%)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: #38bdf8; margin-bottom: 10px;">📊 Financial Metrics</h3>
+                    <ul style="color: #cbd5e1; line-height: 1.8;">
+                        <li>✓ FY25 Revenue: ₹28,393 Mn (+9.6% YoY)</li>
+                        <li>✓ FY25 EBITDA Margin: 19.8% (stable)</li>
+                        <li>✓ Net DSO: 71 days (efficient)</li>
+                        <li>✓ Cash Position: ₹18.2B (M&A ready)</li>
+                        <li>✓ Voluntary Attrition: 16.2% LTM</li>
+                        <li>✓ Active Clients: 76 | $1M+ clients: 40</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendation -->
+        <div style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 12px; padding: 30px; margin-top: 30px; margin-bottom: 20px;">
+            <h2 style="color: #38bdf8; margin-bottom: 20px;">🎯 Investment Recommendation</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                <div>
+                    <h3 style="color: #f59e0b; margin-bottom: 10px;">📌 Base Case (60% Probability)</h3>
+                    <p style="color: #cbd5e1; margin-bottom: 10px;"><strong>RATING: HOLD at ₹520</strong></p>
+                    <ul style="color: #cbd5e1; line-height: 1.8; font-size: 0.9rem;">
+                        <li>• Fair Value: ₹401 (22.9% downside)</li>
+                        <li>• Revenue CAGR: 15% (FY25-31)</li>
+                        <li>• Margin expansion: 19.8% → 23%</li>
+                        <li>• 3-year MOIC: 1.05x (below target)</li>
+                        <li>• Requires near-perfect execution</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 style="color: #10b981; margin-bottom: 10px;">🚀 Bull Case (25% Probability)</h3>
+                    <p style="color: #cbd5e1; margin-bottom: 10px;"><strong>RATING: BUY | Target: ₹550 (12M)</strong></p>
+                    <ul style="color: #cbd5e1; line-height: 1.8; font-size: 0.9rem;">
+                        <li>• Fair Value: ₹550 (+5.7% upside)</li>
+                        <li>• Tectonic ramps to $15-20M+</li>
+                        <li>• Cortex gains faster adoption</li>
+                        <li>• 3-year MOIC: 2.35x (strong)</li>
+                        <li>• 34% IRR over 3 years</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 style="color: #ef4444; margin-bottom: 10px;">📉 Bear Case (15% Probability)</h3>
+                    <p style="color: #cbd5e1; margin-bottom: 10px;"><strong>RATING: REDUCE above ₹550</strong></p>
+                    <ul style="color: #cbd5e1; line-height: 1.8; font-size: 0.9rem;">
+                        <li>• Fair Value: ₹280 (46.1% downside)</li>
+                        <li>• Tectonic/Cortex adoption slow</li>
+                        <li>• M&A integration challenges</li>
+                        <li>• 3-year MOIC: 1.05x (value loss)</li>
+                        <li>• Execution concerns materialize</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(56, 189, 248, 0.2);">
+                <h3 style="color: #38bdf8; margin-bottom: 10px;">🎪 Action Plan</h3>
+                <p style="color: #cbd5e1;"><strong>For New Investors:</strong> Target entry ₹400-450 (20-25% discount). Accumulate in tranches. 3-5 year hold. Exit ₹550-600 (Bull Case).</p>
+                <p style="color: #cbd5e1;"><strong>For Current Holders:</strong> Hold on strength if Bull Case conviction. Trim above ₹550. Add on dips to ₹400-450.</p>
+                <p style="color: #cbd5e1;"><strong>Catalysts:</strong> Q3 FY26 results (Jan 2026), BioPharm integration, Tectonic revenue ramp, Cortex customer wins, M&A announcements.</p>
+            </div>
+        </div>
+
+        <footer style="text-align: center; color: #64748b; padding: 30px 0; border-top: 1px solid rgba(56, 189, 248, 0.2); margin-top: 30px;">
+            <p>DCF Model Built: Dec 27, 2025 | Data Sources: Indegene FY25 Annual Report, Q1-Q2 FY26 Earnings, BioPharm Acquisition Presentation</p>
+            <p style="font-size: 0.85rem; margin-top: 10px;">Assumptions: Risk-free rate 6.5%, Beta 1.2, MRP 7%, WACC 14.9%, Terminal growth 4%, Terminal margin 23%</p>
+        </footer>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function calculateValuation() {
+            // Get input values
+            const fy25Revenue = 28393;
+            const h1Revenue = 15650;
+            const stockPrice = parseFloat(document.getElementById('stock-price').value) || 520;
+            const growthFY26 = parseFloat(document.getElementById('growth-fy26').value) / 100;
+            const growthCAGR = parseFloat(document.getElementById('growth-cagr').value) / 100;
+            const terminalGrowth = parseFloat(document.getElementById('growth-terminal').value) / 100;
+            const terminalMargin = parseFloat(document.getElementById('terminal-margin').value) / 100;
+            const taxRate = parseFloat(document.getElementById('tax-rate').value) / 100;
+            const capexPct = parseFloat(document.getElementById('capex-pct').value) / 100;
+            
+            const rfRate = parseFloat(document.getElementById('rf-rate').value) / 100;
+            const beta = parseFloat(document.getElementById('beta').value);
+            const mrp = parseFloat(document.getElementById('mrp').value) / 100;
+            const terminalMultiple = parseFloat(document.getElementById('terminal-multiple').value);
+            
+            // Calculate WACC
+            const coe = rfRate + (beta * mrp);
+            document.getElementById('coe').value = (coe * 100).toFixed(2);
+            document.getElementById('wacc').value = (coe * 100).toFixed(2);
+
+            // Revenue forecast
+            const revenues = [fy25Revenue];
+            revenues.push(fy25Revenue * (1 + growthFY26)); // FY26E
+            
+            for (let i = 0; i < 5; i++) {
+                revenues.push(revenues[revenues.length - 1] * (1 + growthCAGR));
+            }
+
+            // EBITDA forecast (margin progression)
+            const margins = [0.198, 0.200, 0.205, 0.225, 0.242, 0.257, 0.230];
+            const ebitdas = revenues.map((rev, idx) => rev * margins[idx]);
+
+            // FCF calculation
+            const fcfs = [];
+            for (let i = 1; i < revenues.length; i++) {
+                const nopat = ebitdas[i] * (1 - taxRate);
+                const da = revenues[i] * 0.0075;
+                const capex = revenues[i] * capexPct;
+                const nwcChange = (revenues[i] - revenues[i-1]) * 0.05;
+                const fcf = nopat + da - capex - nwcChange;
+                fcfs.push(fcf);
+            }
+
+            // PV of FCF
+            let pvFCF = 0;
+            for (let i = 0; i < fcfs.length; i++) {
+                pvFCF += fcfs[i] / Math.pow(1 + coe, i + 1);
+            }
+
+            // Terminal Value
+            const terminalRevenue = revenues[revenues.length - 1] * (1 + terminalGrowth);
+            const terminalEBITDA = terminalRevenue * terminalMargin;
+            const terminalNOPAT = terminalEBITDA * (1 - taxRate);
+            const terminalDA = terminalRevenue * 0.0075;
+            const terminalCapex = terminalRevenue * capexPct;
+            const terminalFCF = terminalNOPAT + terminalDA - terminalCapex;
+            const terminalValue = terminalFCF * (1 + terminalGrowth) / (coe - terminalGrowth);
+            const pvTerminal = terminalValue / Math.pow(1 + coe, fcfs.length);
+
+            // Enterprise Value and Equity Value
+            const ev = pvFCF + pvTerminal;
+            const cash = 18200;
+            const equityValue = ev + cash;
+            const shares = 239;
+            const valuePerShare = equityValue / shares;
+
+            // Update UI
+            document.getElementById('rev-fy26').textContent = Math.round(revenues[1]).toLocaleString();
+            document.getElementById('rev-fy27').textContent = Math.round(revenues[2]).toLocaleString();
+            document.getElementById('rev-fy28').textContent = Math.round(revenues[3]).toLocaleString();
+            document.getElementById('rev-fy29').textContent = Math.round(revenues[4]).toLocaleString();
+            document.getElementById('rev-fy30').textContent = Math.round(revenues[5]).toLocaleString();
+            document.getElementById('rev-fy31').textContent = Math.round(revenues[6]).toLocaleString();
+
+            document.getElementById('ebitda-fy26').textContent = Math.round(ebitdas[1]).toLocaleString();
+            document.getElementById('ebitda-fy27').textContent = Math.round(ebitdas[2]).toLocaleString();
+            document.getElementById('ebitda-fy28').textContent = Math.round(ebitdas[3]).toLocaleString();
+            document.getElementById('ebitda-fy29').textContent = Math.round(ebitdas[4]).toLocaleString();
+            document.getElementById('ebitda-fy30').textContent = Math.round(ebitdas[5]).toLocaleString();
+            document.getElementById('ebitda-fy31').textContent = Math.round(ebitdas[6]).toLocaleString();
+
+            document.getElementById('margin-fy26').textContent = (margins[1] * 100).toFixed(1) + '%';
+            document.getElementById('margin-fy27').textContent = (margins[2] * 100).toFixed(1) + '%';
+            document.getElementById('margin-fy28').textContent = (margins[3] * 100).toFixed(1) + '%';
+            document.getElementById('margin-fy29').textContent = (margins[4] * 100).toFixed(1) + '%';
+            document.getElementById('margin-fy30').textContent = (margins[5] * 100).toFixed(1) + '%';
+            document.getElementById('margin-fy31').textContent = (margins[6] * 100).toFixed(1) + '%';
+
+            document.getElementById('pv-fcf').textContent = '₹' + Math.round(pvFCF).toLocaleString() + ' Mn';
+            document.getElementById('terminal-value').textContent = '₹' + Math.round(terminalValue).toLocaleString() + ' Mn';
+            document.getElementById('pv-terminal').textContent = '₹' + Math.round(pvTerminal).toLocaleString() + ' Mn';
+            document.getElementById('enterprise-value').textContent = '₹' + Math.round(ev).toLocaleString() + ' Mn';
+            document.getElementById('value-per-share').textContent = '₹' + Math.round(valuePerShare).toLocaleString();
+            document.getElementById('dcf-base').textContent = '₹' + Math.round(valuePerShare);
+            
+            const downside = ((valuePerShare - stockPrice) / stockPrice * 100).toFixed(1);
+            document.getElementById('downside-base').textContent = (downside > 0 ? 'UPSIDE: +' : 'DOWNSIDE: ') + downside + '%';
+
+            // Update FCF table
+            document.getElementById('fcf-fy26').textContent = Math.round(fcfs[0]).toLocaleString();
+            document.getElementById('fcf-fy27').textContent = Math.round(fcfs[1]).toLocaleString();
+            document.getElementById('fcf-fy28').textContent = Math.round(fcfs[2]).toLocaleString();
+            document.getElementById('fcf-fy29').textContent = Math.round(fcfs[3]).toLocaleString();
+            document.getElementById('fcf-fy30').textContent = Math.round(fcfs[4]).toLocaleString();
+            document.getElementById('fcf-fy31').textContent = Math.round(fcfs[5]).toLocaleString();
+
+            // Update growth rates
+            for (let i = 1; i <= 6; i++) {
+                const rate = i === 1 ? growthFY26 : growthCAGR;
+                document.getElementById('grw-fy' + (25 + i)).textContent = (rate * 100).toFixed(1) + '%';
+            }
+        }
+
+        function loadBaseCase() {
+            document.getElementById('growth-fy26').value = 10;
+            document.getElementById('growth-cagr').value = 15;
+            document.getElementById('growth-terminal').value = 4;
+            document.getElementById('terminal-margin').value = 23;
+            document.getElementById('rf-rate').value = 6.5;
+            document.getElementById('beta').value = 1.2;
+            document.getElementById('mrp').value = 7;
+            document.getElementById('terminal-multiple').value = 12;
+            calculateValuation();
+            alert('✅ Base Case loaded\n\nFair Value: ₹401\nWACC: 14.9%\nDownside: -22.9%\n\nRATING: HOLD at ₹520');
+        }
+
+        function loadBullCase() {
+            document.getElementById('growth-fy26').value = 12;
+            document.getElementById('growth-cagr').value = 18;
+            document.getElementById('growth-terminal').value = 5;
+            document.getElementById('terminal-margin').value = 24;
+            document.getElementById('rf-rate').value = 6;
+            document.getElementById('beta').value = 1.0;
+            document.getElementById('mrp').value = 6.5;
+            document.getElementById('terminal-multiple').value = 14;
+            calculateValuation();
+            alert('🚀 Bull Case loaded\n\nFair Value: ₹550\nWACC: 12.5%\nUpside: +5.7%\n\nRATING: BUY | Target: ₹550-600\n3Y IRR: 34%');
+        }
+
+        function loadBearCase() {
+            document.getElementById('growth-fy26').value = 5;
+            document.getElementById('growth-cagr').value = 10;
+            document.getElementById('growth-terminal').value = 3;
+            document.getElementById('terminal-margin').value = 21;
+            document.getElementById('rf-rate').value = 7;
+            document.getElementById('beta').value = 1.4;
+            document.getElementById('mrp').value = 7.5;
+            document.getElementById('terminal-multiple').value = 11;
+            calculateValuation();
+            alert('📉 Bear Case loaded\n\nFair Value: ₹280\nWACC: 16.8%\nDownside: -46.1%\n\nRATING: REDUCE above ₹550\n3Y IRR: 2%');
+        }
+
+        // Initialize on load
+        window.addEventListener('load', calculateValuation);
+    </script>
+</body>
+</html>

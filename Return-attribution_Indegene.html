@@ -1,0 +1,291 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Return Attribution Analysis - Indegene</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; background: #f8f9fa; }
+        .header { text-align: center; background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white; border-radius: 8px; overflow: hidden; }
+        th, td { border: 1px solid #e2e8f0; padding: 12px 15px; text-align: center; }
+        th { background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); color: white; font-weight: 600; }
+        .highlight { background-color: #dbeafe; font-weight: 600; }
+        .metric { font-weight: 700; color: #1e3a8a; }
+        .positive { background-color: #dcfce7; }
+        .neutral { background-color: #f0f4f8; }
+        h2 { color: #1e3a8a; margin-top: 30px; margin-bottom: 15px; font-size: 1.3em; border-bottom: 3px solid #3b82f6; padding-bottom: 8px; }
+        .waterfall-box { background: #f0f4f8; padding: 15px; border-radius: 8px; margin: 15px 0; }
+        .chart-row { display: flex; align-items: center; margin: 12px 0; }
+        .chart-bar { height: 24px; background: linear-gradient(90deg, #3b82f6 0%, #1e40af 100%); border-radius: 4px; margin-right: 10px; min-width: 2%; }
+        .chart-label { min-width: 200px; font-weight: 500; }
+        .chart-value { min-width: 100px; text-align: right; font-weight: 700; color: #1e3a8a; }
+        footer { text-align: center; margin-top: 40px; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 0.85em; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>LBO Return Attribution Analysis</h1>
+        <p>IRR & MOIC Decomposition - Base Case Scenario</p>
+    </div>
+
+    <h2>Return Attribution Summary</h2>
+    <table>
+        <tr>
+            <th>Metric</th>
+            <th>Entry Year (FY25)</th>
+            <th>Exit Year (FY30E)</th>
+            <th>Absolute Change</th>
+            <th>% Contribution<br>to IRR</th>
+        </tr>
+        <tr class="highlight">
+            <td><strong>Entry EV</strong></td>
+            <td class="metric">₹103 Bn</td>
+            <td>-</td>
+            <td>-</td>
+            <td>Baseline</td>
+        </tr>
+        <tr>
+            <td>Revenue</td>
+            <td>28.4</td>
+            <td>60.2</td>
+            <td class="metric">+₹31.8 Bn</td>
+            <td class="positive">35%</td>
+        </tr>
+        <tr>
+            <td>EBITDA</td>
+            <td>5.6</td>
+            <td>13.7</td>
+            <td class="metric">+₹8.1 Bn</td>
+            <td class="positive">38%</td>
+        </tr>
+        <tr>
+            <td>EBITDA Margin</td>
+            <td>19.8%</td>
+            <td>22.8%</td>
+            <td class="metric">+300bps</td>
+            <td class="positive">20%</td>
+        </tr>
+        <tr class="highlight">
+            <td><strong>Exit EV (22x EBITDA)</strong></td>
+            <td>-</td>
+            <td class="metric">₹301 Bn</td>
+            <td class="metric">+₹198 Bn</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td>Less: Net Debt</td>
+            <td>15.0</td>
+            <td>8.0</td>
+            <td>-7.0</td>
+            <td class="positive">15%</td>
+        </tr>
+        <tr class="highlight">
+            <td><strong>Equity Value (Exit)</strong></td>
+            <td class="metric">88 Bn</td>
+            <td class="metric">293 Bn</td>
+            <td class="metric">+₹205 Bn</td>
+            <td>-</td>
+        </tr>
+        <tr class="highlight">
+            <td><strong>MOIC</strong></td>
+            <td>1.0x</td>
+            <td class="metric">3.33x</td>
+            <td class="metric">+2.33x</td>
+            <td>-</td>
+        </tr>
+        <tr class="highlight">
+            <td><strong>IRR</strong></td>
+            <td>-</td>
+            <td class="metric">27.8%</td>
+            <td>-</td>
+            <td class="metric">100%</td>
+        </tr>
+    </table>
+
+    <h2>IRR Decomposition: Growth vs. Multiple vs. Leverage</h2>
+    <div class="waterfall-box">
+        <h3>Contribution Analysis (5-Year Holding Period)</h3>
+        
+        <div class="chart-row">
+            <div class="chart-label">Revenue Growth (15.2% CAGR)</div>
+            <div class="chart-bar" style="width: 35%;"></div>
+            <div class="chart-value">+9.8% IRR</div>
+        </div>
+
+        <div class="chart-row">
+            <div class="chart-label">Margin Expansion (300bps)</div>
+            <div class="chart-bar" style="width: 20%; background: linear-gradient(90deg, #10b981 0%, #059669 100%);"></div>
+            <div class="chart-value">+5.6% IRR</div>
+        </div>
+
+        <div class="chart-row">
+            <div class="chart-label">Multiple Realization (22x EBITDA)</div>
+            <div class="chart-bar" style="width: 28%; background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);"></div>
+            <div class="chart-value">+7.8% IRR</div>
+        </div>
+
+        <div class="chart-row">
+            <div class="chart-label">Debt Paydown (₹7Bn reduction)</div>
+            <div class="chart-bar" style="width: 15%; background: linear-gradient(90deg, #8b5cf6 0%, #6d28d9 100%);"></div>
+            <div class="chart-value">+4.2% IRR</div>
+        </div>
+
+        <div class="chart-row highlight">
+            <div class="chart-label"><strong>Total IRR</strong></div>
+            <div class="chart-bar" style="width: 100%;"></div>
+            <div class="chart-value"><strong>27.8%</strong></div>
+        </div>
+    </div>
+
+    <h2>Scenario Analysis: Return Attribution by Case</h2>
+    <table>
+        <tr>
+            <th>Scenario</th>
+            <th>Rev CAGR</th>
+            <th>FY30E EBITDA</th>
+            <th>Exit Multiple</th>
+            <th>Exit EV</th>
+            <th>MOIC</th>
+            <th>IRR</th>
+        </tr>
+        <tr>
+            <td><strong>BEAR</strong></td>
+            <td>10%</td>
+            <td>₹10.8 Bn</td>
+            <td>18x</td>
+            <td>₹194 Bn</td>
+            <td>2.20x</td>
+            <td class="metric">17.4%</td>
+        </tr>
+        <tr>
+            <td><strong>BASE</strong></td>
+            <td>15%</td>
+            <td>₹13.7 Bn</td>
+            <td>22x</td>
+            <td>₹301 Bn</td>
+            <td>3.33x</td>
+            <td class="metric">27.8%</td>
+        </tr>
+        <tr class="highlight">
+            <td><strong>BULL</strong></td>
+            <td>18%</td>
+            <td>₹15.2 Bn</td>
+            <td>26x</td>
+            <td>₹395 Bn</td>
+            <td>4.42x</td>
+            <td class="metric">36.2%</td>
+        </tr>
+    </table>
+
+    <h2>Return Bridge Waterfall: Entry → Exit</h2>
+    <table>
+        <tr>
+            <th>Driver</th>
+            <th>Baseline</th>
+            <th>Component</th>
+            <th>Exit Contribution</th>
+            <th>Cumulative Impact</th>
+        </tr>
+        <tr>
+            <td><strong>Entry Equity Investment</strong></td>
+            <td class="metric">₹88 Bn</td>
+            <td>-</td>
+            <td>-</td>
+            <td class="metric">₹88 Bn</td>
+        </tr>
+        <tr>
+            <td>Revenue Growth Effect</td>
+            <td>-</td>
+            <td>28.4 → 60.2</td>
+            <td class="positive">+₹55.8 Bn</td>
+            <td class="metric">₹143.8 Bn</td>
+        </tr>
+        <tr>
+            <td>Margin Expansion Effect</td>
+            <td>-</td>
+            <td>19.8% → 22.8%</td>
+            <td class="positive">+₹38.2 Bn</td>
+            <td class="metric">₹182.0 Bn</td>
+        </tr>
+        <tr>
+            <td>Multiple Realization</td>
+            <td>-</td>
+            <td>18x → 22x</td>
+            <td class="positive">+₹64.2 Bn</td>
+            <td class="metric">₹246.2 Bn</td>
+        </tr>
+        <tr>
+            <td>Debt Reduction Benefit</td>
+            <td>-</td>
+            <td>₹15.0 → ₹8.0 Bn</td>
+            <td class="positive">+₹7.0 Bn</td>
+            <td class="metric">₹253.2 Bn</td>
+        </tr>
+        <tr>
+            <td>Taxes & Fees (estimated)</td>
+            <td>-</td>
+            <td>-2% of gains</td>
+            <td>-₹5.1 Bn</td>
+            <td class="metric">₹248.1 Bn</td>
+        </tr>
+        <tr class="highlight">
+            <td><strong>Exit Equity Value</strong></td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td class="metric">₹293 Bn</td>
+        </tr>
+    </table>
+
+    <h2>Key Return Drivers Priority Ranking</h2>
+    <table>
+        <tr>
+            <th>Rank</th>
+            <th>Driver</th>
+            <th>IRR Impact</th>
+            <th>Key Assumptions</th>
+            <th>Risk Level</th>
+        </tr>
+        <tr class="highlight">
+            <td>1</td>
+            <td><strong>Revenue Growth</strong></td>
+            <td class="metric">+9.8%</td>
+            <td>15.2% CAGR, Tectonic success</td>
+            <td>Medium</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Multiple Realization</td>
+            <td>+7.8%</td>
+            <td>22x exit (vs 16x entry)</td>
+            <td>High</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Margin Expansion</td>
+            <td>+5.6%</td>
+            <td>300bps improvement to 22.8%</td>
+            <td>Low</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Leverage Paydown</td>
+            <td>+4.2%</td>
+            <td>Debt from ₹15.0 to ₹8.0 Bn</td>
+            <td>Low</td>
+        </tr>
+        <tr class="highlight">
+            <td colspan="2"><strong>Total</strong></td>
+            <td class="metric"><strong>27.8%</strong></td>
+            <td colspan="2">Base case IRR</td>
+        </tr>
+    </table>
+
+    <footer>
+        <p>Return attribution analysis based on LBO model with 5-year holding period and ₹88Bn equity entry value. As of Dec 27, 2025.</p>
+    </footer>
+</body>
+</html>
