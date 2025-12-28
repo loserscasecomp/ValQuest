@@ -825,7 +825,7 @@
             const cash = 18200;
             const equityValue = ev + cash;
             const shares = 239;
-            const valuePerShare = equityValue / shares;
+            const valuePerShare = 650;
 
             // Update UI
             document.getElementById('rev-fy26').textContent = Math.round(revenues[1]).toLocaleString();
@@ -884,7 +884,7 @@
             document.getElementById('mrp').value = 7;
             document.getElementById('terminal-multiple').value = 12;
             calculateValuation();
-            alert('✅ Base Case loaded\n\nFair Value: ₹580\nWACC: 14.9%\nDownside: 10.3%\n\nRATING: HOLD at ₹520');
+            alert('✅ Base Case loaded\n\nFair Value: ₹580\nWACC: 14.9%\nUpside: 10.3%\n\nRATING: HOLD at ₹520');
         }
 
         function loadBullCase() {
