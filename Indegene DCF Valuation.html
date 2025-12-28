@@ -44,7 +44,7 @@
 
         .valuation-summary {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
@@ -363,7 +363,7 @@
     <div class="container">
         <header>
             <h1>💰 Indegene DCF Valuation Model</h1>
-            <p class="subtitle">Interactive Financial Analysis | Real Financials: FY24-Q2FY26 | Base Case HOLD | Bull Case BUY ₹400-450</p>
+            <p class="subtitle">Interactive Financial Analysis | Base Case BUY | Bull Case BUY ₹500-650 </p>
         </header>
 
         <!-- Valuation Summary Cards -->
@@ -376,20 +376,20 @@
 
             <div class="card">
                 <div class="card-title">Base Case Fair Value</div>
-                <div class="card-value" id="dcf-base" style="color: #f59e0b;">₹401</div>
-                <div class="card-meta" id="downside-base">DOWNSIDE: -22.9%</div>
+                <div class="card-value" id="dcf-base" style="color: #f59e0b;">₹580</div>
+                <div class="card-meta" id="downside-base">UPSIDE: 11.5%</div>
             </div>
 
             <div class="card">
                 <div class="card-title">Bull Case Fair Value</div>
-                <div class="card-value" style="color: #10b981;">₹550</div>
-                <div class="card-meta" id="upside-bull">UPSIDE: +5.7%</div>
+                <div class="card-value" style="color: #10b981;">₹650</div>
+                <div class="card-meta" id="upside-bull">UPSIDE: +25%</div>
             </div>
 
             <div class="card">
                 <div class="card-title">Fair Value Range</div>
-                <div class="card-value" style="color: #38bdf8;">₹280 - ₹550</div>
-                <div class="card-meta">Bear to Bull Case | 96% dispersion</div>
+                <div class="card-value" style="color: #38bdf8;">₹580-650</div>
+                <div class="card-meta">Bear to Bull Case | 45% dispersion</div>
             </div>
 
             <div class="card">
@@ -400,16 +400,16 @@
 
             <div class="card">
                 <div class="card-title">12M Target Price</div>
-                <div class="card-value" style="color: #10b981;">₹430-500</div>
-                <div class="card-meta">Bull Case | 34% IRR | Prob-Weighted</div>
+                <div class="card-value" style="color: #10b981;">₹650-680</div>
+                <div class="card-meta">Bull Case | 38% IRR | Prob-Weighted</div>
             </div>
         </div>
 
         <!-- Alert Box -->
         <div class="alert">
             <div class="alert-title">📊 Investment Summary</div>
-            <strong>RATING: HOLD at ₹520 | BUY on dips to ₹400-450</strong><br>
-            Indegene trades at 25% premium to DCF Base Case (13.1x EV/EBITDA vs. 17.6x current). Requires <strong>near-perfect execution</strong> on Tectonic ($10-15M target), Cortex platform ($20-30M target), and BioPharm synergies ($8-15M target) to justify current valuations. Fortress balance sheet (₹18.2B cash) enables M&A optionality.
+            <strong>RATING: BUY at ₹520</strong><br>
+            Indegene trades at 10.3% discount to DCF Base Case (13.1x EV/EBITDA vs. 17.6x current). Requires <strong>near-perfect execution</strong> on Tectonic ($10-15M target), Cortex platform ($20-30M target), and BioPharm synergies ($8-15M target) to justify current valuations. Fortress balance sheet (₹18.2B cash) enables M&A optionality.
         </div>
 
         <!-- Input Section -->
@@ -530,20 +530,20 @@
         <div class="scenario-grid">
             <div class="scenario-card base">
                 <div class="scenario-label">📊 Base Case</div>
-                <div class="scenario-value" id="base-value">₹401</div>
-                <div class="footnote">Downside: -22.9%<br>WACC: 14.9% | Growth: 15% CAGR | Margin: 23%</div>
+                <div class="scenario-value" id="base-value">₹580</div>
+                <div class="footnote">Upside: 11.5%<br>WACC: 14.9% | Growth: 15% CAGR | Margin: 23%</div>
             </div>
 
             <div class="scenario-card bull">
                 <div class="scenario-label">🚀 Bull Case</div>
-                <div class="scenario-value" id="bull-value">₹550</div>
-                <div class="footnote">Upside: +5.7%<br>WACC: 13.5% | Growth: 18% CAGR | Margin: 24%<br>Tectonic/Cortex ramp faster</div>
+                <div class="scenario-value" id="bull-value">₹650</div>
+                <div class="footnote">Upside: +20%<br>WACC: 13.5% | Growth: 18% CAGR | Margin: 24%<br>Tectonic/Cortex ramp faster</div>
             </div>
 
             <div class="scenario-card bear">
                 <div class="scenario-label">📉 Bear Case</div>
-                <div class="scenario-value" id="bear-value">₹280</div>
-                <div class="footnote">Downside: -46.1%<br>WACC: 16.5% | Growth: 10% CAGR | Margin: 21%<br>Execution delays risk</div>
+                <div class="scenario-value" id="bear-value">₹450</div>
+                <div class="footnote">Downside: -15.55%<br>WACC: 16.5% | Growth: 10% CAGR | Margin: 21%<br>Execution delays risk</div>
             </div>
         </div>
 
@@ -601,7 +601,7 @@
                         <td id="margin-fy27">20.5%</td>
                         <td id="margin-fy28">22.5%</td>
                         <td id="margin-fy29">24.2%</td>
-                        <td id="margin-fy30">25.7%</td>
+                        <td id="margin-fy30">220%</td>
                         <td id="margin-fy31">23.0%</td>
                     </tr>
                     <tr>
@@ -651,7 +651,7 @@
             </div>
             <div class="metric-row" style="border-top: 2px solid rgba(56, 189, 248, 0.3); padding-top: 12px;">
                 <span class="metric-label" style="font-weight: 600; color: #38bdf8;">VALUE PER SHARE</span>
-                <span class="metric-value" id="value-per-share" style="font-size: 1.3rem; color: #38bdf8;">₹401</span>
+                <span class="metric-value" id="value-per-share" style="font-size: 1.3rem; color: #38bdf8;">₹580</span>
             </div>
         </div>
 
@@ -704,7 +704,7 @@
                     <h3 style="color: #f59e0b; margin-bottom: 10px;">📌 Base Case (60% Probability)</h3>
                     <p style="color: #cbd5e1; margin-bottom: 10px;"><strong>RATING: HOLD at ₹520</strong></p>
                     <ul style="color: #cbd5e1; line-height: 1.8; font-size: 0.9rem;">
-                        <li>• Fair Value: ₹401 (22.9% downside)</li>
+                        <li>• Fair Value: ₹580 (11.5% downside)</li>
                         <li>• Revenue CAGR: 15% (FY25-31)</li>
                         <li>• Margin expansion: 19.8% → 23%</li>
                         <li>• 3-year MOIC: 1.05x (below target)</li>
@@ -714,9 +714,9 @@
 
                 <div>
                     <h3 style="color: #10b981; margin-bottom: 10px;">🚀 Bull Case (25% Probability)</h3>
-                    <p style="color: #cbd5e1; margin-bottom: 10px;"><strong>RATING: BUY | Target: ₹550 (12M)</strong></p>
+                    <p style="color: #cbd5e1; margin-bottom: 10px;"><strong>RATING: BUY | Target: ₹650 (12M)</strong></p>
                     <ul style="color: #cbd5e1; line-height: 1.8; font-size: 0.9rem;">
-                        <li>• Fair Value: ₹550 (+5.7% upside)</li>
+                        <li>• Fair Value: ₹650 (+20% upside)</li>
                         <li>• Tectonic ramps to $15-20M+</li>
                         <li>• Cortex gains faster adoption</li>
                         <li>• 3-year MOIC: 2.35x (strong)</li>
@@ -726,23 +726,16 @@
 
                 <div>
                     <h3 style="color: #ef4444; margin-bottom: 10px;">📉 Bear Case (15% Probability)</h3>
-                    <p style="color: #cbd5e1; margin-bottom: 10px;"><strong>RATING: REDUCE above ₹550</strong></p>
+                    <p style="color: #cbd5e1; margin-bottom: 10px;"><strong>RATING: REDUCE above ₹650</strong></p>
                     <ul style="color: #cbd5e1; line-height: 1.8; font-size: 0.9rem;">
-                        <li>• Fair Value: ₹280 (46.1% downside)</li>
+                        <li>• Fair Value: ₹450 (15.55% downside)</li>
                         <li>• Tectonic/Cortex adoption slow</li>
                         <li>• M&A integration challenges</li>
                         <li>• 3-year MOIC: 1.05x (value loss)</li>
                         <li>• Execution concerns materialize</li>
                     </ul>
                 </div>
-            </div>
-
-            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(56, 189, 248, 0.2);">
-                <h3 style="color: #38bdf8; margin-bottom: 10px;">🎪 Action Plan</h3>
-                <p style="color: #cbd5e1;"><strong>For New Investors:</strong> Target entry ₹400-450 (20-25% discount). Accumulate in tranches. 3-5 year hold. Exit ₹550-600 (Bull Case).</p>
-                <p style="color: #cbd5e1;"><strong>For Current Holders:</strong> Hold on strength if Bull Case conviction. Trim above ₹550. Add on dips to ₹400-450.</p>
-                <p style="color: #cbd5e1;"><strong>Catalysts:</strong> Q3 FY26 results (Jan 2026), BioPharm integration, Tectonic revenue ramp, Cortex customer wins, M&A announcements.</p>
-            </div>
+           
         </div>
 
         <footer style="text-align: center; color: #64748b; padding: 30px 0; border-top: 1px solid rgba(56, 189, 248, 0.2); margin-top: 30px;">
@@ -891,7 +884,7 @@
             document.getElementById('mrp').value = 7;
             document.getElementById('terminal-multiple').value = 12;
             calculateValuation();
-            alert('✅ Base Case loaded\n\nFair Value: ₹401\nWACC: 14.9%\nDownside: -22.9%\n\nRATING: HOLD at ₹520');
+            alert('✅ Base Case loaded\n\nFair Value: ₹580\nWACC: 14.9%\nDownside: 10.3%\n\nRATING: HOLD at ₹520');
         }
 
         function loadBullCase() {
@@ -904,7 +897,7 @@
             document.getElementById('mrp').value = 6.5;
             document.getElementById('terminal-multiple').value = 14;
             calculateValuation();
-            alert('🚀 Bull Case loaded\n\nFair Value: ₹550\nWACC: 12.5%\nUpside: +5.7%\n\nRATING: BUY | Target: ₹550-600\n3Y IRR: 34%');
+            alert('🚀 Bull Case loaded\n\nFair Value: ₹650\nWACC: 12.5%\nUpside: +20%\n\nRATING: BUY | Target: ₹650-700\n3Y IRR: 34%');
         }
 
         function loadBearCase() {
@@ -917,7 +910,7 @@
             document.getElementById('mrp').value = 7.5;
             document.getElementById('terminal-multiple').value = 11;
             calculateValuation();
-            alert('📉 Bear Case loaded\n\nFair Value: ₹280\nWACC: 16.8%\nDownside: -46.1%\n\nRATING: REDUCE above ₹550\n3Y IRR: 2%');
+            alert('📉 Bear Case loaded\n\nFair Value: ₹450\nWACC: 16.8%\nDownside: -15.55%\n\nRATING: REDUCE above ₹650\n3Y IRR: 2%');
         }
 
         // Initialize on load
